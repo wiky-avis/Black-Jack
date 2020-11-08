@@ -15,7 +15,8 @@ class Card(object):
             rep = 'XX' # Если карта закрыта (face_up = False) выводится "XX"
         return rep
     def flip(self):
-        self.is_face_up = not self.is_face_up
+        self.is_face_up = not self.is_face_up # перворачивает карту изменяя значение атрибута is_face_up. 
+        # если оно равно True, то после вызова этого метода окажется равным False.
 
 class Hand(object):
     # Cоздание пустого списка карт, в который в последствии будут добавляться карты по одной.

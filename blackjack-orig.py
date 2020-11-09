@@ -16,7 +16,8 @@ class BJ_Card(cards.Card): # расширяет функциональность
 
 class BJ_Deck(cards.Deck):
     """Колода  для  игры  в  "Блек-джек". """
-    def populate(self): # переопределен метод cards.Deck's  populate(), и теперь новая колода класса BJ_Deck наполняется картами класса BJ_Card
+    def populate(self): # переопределен метод cards.Deck's  populate(), и теперь новая колода класса BJ_Deck 
+        # наполняется картами класса BJ_Card
         for suit in BJ_Card.SUITS:
             for rank in BJ_Card.RANKS:
                 self.cards.append(BJ_Card(rank, suit))

@@ -84,8 +84,13 @@ class BJ_Player(BJ_Hand):
         response = games.ask_yes_no('\n' + self.name + ', будете брать еще карты? (Y/N): ')
         return response == 'y'
     def is_rate(self): # Ставка игрока
-        rate = games.ask_number(self.name + ', мы принимаем ставки от 10 до 500 руб, сколько хотите поставить? : ', low = 10, hight = 500)
+        rate = games.ask_number(self.name + ', мы принимаем ставки от 10 до 500 руб, сколько хотите поставить? : ', low = 10, hight = 500+1)
         return rate
+    def how_much_money(self): # Сколько денег у игрока
+        money = games.ask_number(self.name + ', сколько у вас денег на игру?(максимум 500 руб.): ', low = 0, hight = 500+1)
+        return money
+    def not_money(self): # закончились деньги
+        print(self.name, 'у вас закончились деньги.')
     def bust(self): # объявляет, что участник перебрал
         print(self.name, 'перебрал.')
         self.lose()
@@ -112,13 +117,15 @@ class BJ_Game(object): #  используется для создания об�
     """Игра в Блек-Джек"""
     def __init__(self, names): # Конструктор принимает список имен и создает на каждое имя по игроку. Кроме того, будут созданы дилер и колода
         self.players = []
-        self.pl_rt = {}
+        self.pl_mn = {}
         for name in names:
             player = BJ_Player(name)
             self.players.append(player)
-            rate1 = player.is_rate()
-            self.pl_rt[name] = rate1
-            print(self.pl_rt)
+            self.money = player.how_much_money()
+            self.rate1 = player.is_rate()
+            print('Ваша ставка: ', self.rate1)
+            self.pl_mn[name] = self.money - self.rate1
+            print('На счету у игроков осталось денег: ', self.pl_mn, '\n')
         self.dealer = BJ_Dealer('Dealer')
         self.deck = BJ_Deck()
         self.deck.populate()
@@ -160,7 +167,6 @@ class BJ_Game(object): #  используется для создания об�
         # сдача дополнительных карт игрокам
         for player in self.players:
             self.__additional_cards(player)
-        self.dealer.flip_first_card() #это первая карта дилера раскрывается
         if not self.still_playing:
             # все игроки перебрали, покажем только "руку" дилера
             print(self.dealer)
